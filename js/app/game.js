@@ -115,6 +115,9 @@ App.classes.Game = (function () {
 
     Game.changeSnakeDirection = function ( event ) {
         event = App.event ? App.event : event;
+        if ( event.keyCode === 116 ) {
+            return true;
+        }
         this.snake.changeDirection( event.keyCode % 37 );
         return false;
     };
