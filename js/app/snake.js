@@ -61,10 +61,10 @@ App.classes.Sanke = (function ( Body ) {
                     item.y++;
                     break;
             }
-            item.x < 0 && (item.x = limitW) ||
-            item.y < 0 && (item.y = limitH) ||
-            item.x >= limitW && (item.x = 0) ||
-            item.y >= limitH && (item.y = 0);
+            (item.x < 0 && (item.x = limitW)) ||
+            (item.y < 0 && (item.y = limitH)) ||
+            (item.x > limitW && (item.x = 0)) ||
+            (item.y > limitH && (item.y = 0));
             var nextDirection = item.direction;
             item.direction = direction;
             direction = nextDirection;
