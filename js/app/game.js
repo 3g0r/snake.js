@@ -27,7 +27,7 @@ App.classes.Game = (function () {
 
         this._initGD();
         this._createSnake();
-        this._initFoodFactory = Game._initFoodFactory.bind( this );
+        this._createFood = Game._createFood.bind( this );
         this.startFoodFactory();
 
         App.onkeydown = Game.changeSnakeDirection.bind( this );
@@ -48,24 +48,28 @@ App.classes.Game = (function () {
         this.snake = new App.classes.Sanke( this._getRandomCoordinate() );
     };
 
-    Game._initFoodFactory = function () {
-        var food = new App.classes.Food(
-            this._getRandomCoordinate(),
+    Game._createFood = function () {
+        var coordinates, __id;
+        do {
+            coordinates = this._getRandomCoordinate();
+            __id = this._getIdByCoordinates( coordinates );
+        }
+        while ( this._foods[__id] );
+        this._foods[__id] = new App.classes.Food(
+            coordinates,
             this.settings.expiredFoodInterval,
             this._beforeFoodDie,
             this._afterFoodLive
         );
-        food.__id = this._foods.length++;
-        this._foods[food.__id] = food;
         this.gd.setFillColor( this.liveFoodColor );
-        this.gd.drawRect( food.coordinates );
+        this.gd.drawRect( coordinates );
         this.gd.setFillColor( this.snakeColor );
     };
 
     Game.prototype.startFoodFactory = function () {
         this._beforeFoodDie = Game._beforeFoodDie.bind( this );
         this._afterFoodLive = Game._afterFoodLive.bind( this );
-        this._foodFactory = App.setInterval( this._initFoodFactory, this.settings.foodCreatedInterval );
+        this._foodFactory = App.setInterval( this._createFood, this.settings.foodCreatedInterval );
     };
 
     Game.prototype.stopFoodFactory = function () {
@@ -98,19 +102,20 @@ App.classes.Game = (function () {
 
     };
 
+    Game.prototype._getIdByCoordinates = function ( coordinates ) {
+        return '(x:'.concat( coordinates.x, ',y:', coordinates.y, ')' );
+    };
+
     Game.prototype.snakeEat = function () {
-        var foodC, head = this.snake.head;
-        for ( var key in this._foods ) {
-            foodC = this._foods[key].coordinates;
-            if ( foodC.x != head.x || foodC.y != head.y ) {
-                continue;
-            }
-            this.snake.eat( this._foods[key] );
-            this._foods[key].destroy();
-            delete this._foods[key];
-            return true;
+        var __id = this._getIdByCoordinates( this.snake.head );
+        if ( !this._foods[__id] ) {
+            return false;
         }
-        return false;
+        this.snake.eat( this._foods[__id] );
+        this._foods[__id].destroy();
+        delete this._foods[__id];
+        this._createFood();
+        return true;
     };
 
     Game.changeSnakeDirection = function ( event ) {
