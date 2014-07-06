@@ -8,7 +8,7 @@
 /**@requires App*/
 /*jsHInt*/
 /*global App*/
-App.classes.GD = (function () {
+App.classes.GD = (function (undefined) {
     'use strict';
 
     function GD( canvas, width, height, step ) {
@@ -41,8 +41,8 @@ App.classes.GD = (function () {
 
     GD.prototype.drawRect = function ( x, y ) {
         this.c2d.fillRect(
-            (x.x || x) * this.step,
-            (x.y || y) * this.step,
+            (x.x !== undefined ? x.x : x) * this.step,
+            (x.y !== undefined ? x.y : y) * this.step,
             x.w || this.step,
             x.h || this.step
         );
@@ -50,8 +50,8 @@ App.classes.GD = (function () {
 
     GD.prototype.clearRect = function ( x, y ) {
         this.c2d.clearRect(
-            (x.x || x) * this.step,
-            (x.y || y) * this.step,
+            (x.x !== undefined ? x.x : x) * this.step,
+            (x.y !== undefined ? x.y : y) * this.step,
             x.w || this.step,
             x.h || this.step
         );
