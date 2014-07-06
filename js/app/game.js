@@ -123,7 +123,9 @@ App.classes.Game = (function () {
         if ( event.keyCode === 116 ) {
             return true;
         }
-        this.snake.changeDirection( event.keyCode % 37 );
+        if ( 37 >= event.keyCode || 40 >= event.keyCode ) {
+            this.snake.changeDirection( event.keyCode % 37 );
+        }
         return false;
     };
 
