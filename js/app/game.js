@@ -134,7 +134,7 @@ App.classes.Game = (function () {
     };
 
     Game._afterFoodLive = function ( food ) {
-        delete this._foods[food.__id];
+        delete this._foods[this._getIdByCoordinates( food.coordinates )];
         this.gd.clearRect( food.coordinates );
     };
 
