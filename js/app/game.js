@@ -49,13 +49,9 @@ App.classes.Game = (function () {
     };
 
     Game._createFood = function () {
-        var coordinates, __id;
-        do {
-            coordinates = this._getRandomCoordinate();
-            __id = this._getIdByCoordinates( coordinates );
-        }
-        while ( this._foods[__id] );
-        this._foods[__id] = new App.classes.Food(
+        var coordinates;
+        while ( !this._isAllowedCoordinates( coordinates = this._getRandomCoordinate() ) );
+        this._foods[this._getIdByCoordinates( coordinates )] = new App.classes.Food(
             coordinates,
             this.settings.expiredFoodInterval,
             this._beforeFoodDie,
@@ -64,6 +60,13 @@ App.classes.Game = (function () {
         this.gd.setFillColor( this.liveFoodColor );
         this.gd.drawRect( coordinates );
         this.gd.setFillColor( this.snakeColor );
+    };
+
+    Game.prototype._isAllowedCoordinates = function ( coordinates ) {
+        var id = this._getIdByCoordinates( coordinates );
+        return !this._foods[id] && this.snake.map(function ( item ) {
+            return this._getIdByCoordinates( item ) === id;
+        }, this ).indexOf( true ) === -1;
     };
 
     Game.prototype.startFoodFactory = function () {
