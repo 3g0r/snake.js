@@ -73,21 +73,17 @@ App.classes.Sanke = (function ( Body ) {
             tail.direction = direction;
             this.push( tail );
         }
-        if(!(this.rendered = !head.nextDirection)){
+        if ( !(this.rendered = !head.nextDirection) ) {
             head.direction = head.nextDirection;
             head.nextDirection = false;
         }
     };
 
     Snake.prototype.changeDirection = function ( direction ) {
-        if ( this.rendered ) {
-            (this.head.direction + 2) % 4 != direction &&
-            (this.head.direction = direction);
-        } else {
-            (this.head.direction + 2) % 4 != direction &&
-            this.head.direction !== direction &&
-            (this.head.nextDirection = direction);
+        if ( (this.head.direction + 2) % 4 == direction || this.head.direction === direction ) {
+            return;
         }
+        this.rendered ? this.head.direction = direction : this.head.nextDirection = direction;
         this.rendered = false;
     };
 
