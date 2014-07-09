@@ -12,6 +12,7 @@
 App.classes.Game = (function () {
     'use strict';
     function Game( settings ) {
+        this.startAt = new App.Date();
         this.settings = settings;
         this._foods = {};
         App.Object.defineProperty( this._foods, 'length', {
@@ -97,7 +98,16 @@ App.classes.Game = (function () {
     };
 
     Game.prototype.renderScoreScreen = function () {
-        App.alert( 'Game Over!\nYour score: '.concat( this.snake.length.toString() ) );
+        App.alert( 'Game Over!\nYour score: '.concat( this.getScore(), '\nAlive time: ', this.getAliveTime(), ' s' ) );
+    };
+
+    Game.prototype.getScore = function () {
+        var aliveTime = this.getAliveTime();
+        return Math.floor( this.snake.length * 1000 / aliveTime + aliveTime * 3 * 100 / 60 );
+    };
+
+    Game.prototype.getAliveTime = function () {
+        return Math.floor( ((new Date()).getTime() - this.startAt.getTime()) / 1000 );
     };
 
     Game.prototype.gameOver = function () {
