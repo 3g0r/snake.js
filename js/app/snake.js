@@ -61,8 +61,8 @@ App.classes.Sanke = (function ( Body ) {
                     item.y++;
                     break;
             }
-            (item.x < 0 && (item.x = limitW-1)) ||
-            (item.y < 0 && (item.y = limitH-1)) ||
+            (item.x < 0 && (item.x = limitW - 1)) ||
+            (item.y < 0 && (item.y = limitH - 1)) ||
             (item.x >= limitW && (item.x = 0)) ||
             (item.y >= limitH && (item.y = 0));
             var nextDirection = item.direction;
@@ -73,12 +73,21 @@ App.classes.Sanke = (function ( Body ) {
             tail.direction = direction;
             this.push( tail );
         }
-        this.rendered = true;
+        if(!(this.rendered = !head.nextDirection)){
+            head.direction = head.nextDirection;
+            head.nextDirection = false;
+        }
     };
 
     Snake.prototype.changeDirection = function ( direction ) {
-        this.rendered &&
-        (this.head.direction + 2) % 4 != direction && (this.head.direction = direction);
+        if ( this.rendered ) {
+            (this.head.direction + 2) % 4 != direction &&
+            (this.head.direction = direction);
+        } else {
+            (this.head.direction + 2) % 4 != direction &&
+            this.head.direction !== direction &&
+            (this.head.nextDirection = direction);
+        }
         this.rendered = false;
     };
 
