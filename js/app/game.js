@@ -103,7 +103,7 @@ App.classes.Game = (function () {
 
     Game.prototype.getScore = function () {
         var aliveTime = this.getAliveTime();
-        return Math.floor( this.snake.length * 1000 / aliveTime + aliveTime * 3 * 100 / 60 );
+        return Math.floor( this.snake.length * this.snake.length / aliveTime );
     };
 
     Game.prototype.getAliveTime = function () {

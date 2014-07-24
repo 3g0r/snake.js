@@ -80,7 +80,7 @@ App.classes.Sanke = (function ( Body ) {
     };
 
     Snake.prototype.changeDirection = function ( direction ) {
-        if ( (this.head.direction + 2) % 4 == direction || this.head.direction === direction ) {
+        if ( (this.head.direction + 2) % 4 == direction || this.head.direction == direction ) {
             return;
         }
         this.rendered ? this.head.direction = direction : this.head.nextDirection = direction;

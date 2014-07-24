@@ -152,11 +152,18 @@ App.classes.GD = (function (undefined) {
         }
     },
     function ( Class, fieldAlias, fieldName ) {
-        Class.prototype.__defineSetter__( fieldAlias, function ( value ) {
-            this[fieldName] = value;
-            return this;
+        Object.defineProperty( Class.prototype, fieldName, {
+            enumerable  : false,
+            configurable: false
         } );
-        Class.prototype.__defineGetter__( fieldAlias, function () {
-            return this[fieldName];
+        Object.defineProperty( Class.prototype, fieldAlias, {
+            enumerable  : true,
+            get: function () {
+                return this[fieldName];
+            },
+            set: function ( value ) {
+                this[fieldName] = value;
+                return this;
+            }
         } );
     } );
